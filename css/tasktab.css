@@ -1,0 +1,89 @@
+/*omitir solo es para dise;o de ejemplo*/
+a{
+    text-decoration: none !important;
+}
+/*omitir solo es para dise;o de ejemplo*/
+
+.targetofreci:hover {
+    color: #282828;
+}
+
+.targetofreci:link  .texact {               
+    color : #282828 !important;
+}
+
+.targetofreci:focus  .texact {               
+    color : 282828 !important;
+}
+
+.targetoactive {
+    border-bottom: 1px #D2D2D2 solid;
+    border-top: 1px #D2D2D2 solid;
+
+}
+
+.targetoactive:hover {
+    border-right: 6px #023e8a solid;
+}
+
+.detaofreci {
+    border-bottom: 1px #D2D2D2 solid;
+    border-top: 1px #D2D2D2 solid;
+    overflow-y: auto;
+    height: 600px;
+}
+
+.listofreci {
+    border-right: 0.5px #D2D2D2 solid;
+    overflow-y: auto;
+    height: 600px;
+}
+
+.botonmenuofreci{
+    display: none;
+}
+
+
+
+@keyframes aparece-izquierda
+{
+    from { 
+         transform: translateX(-100%); 
+         opacity: 0;
+            }
+    to { 
+         transform: translateX(0%); 
+         opacity: 1;
+            }
+}
+
+@keyframes aparece-derecha
+{
+    from { 
+         transform: translateX(0%); 
+         opacity: 0;
+            }
+    to { 
+         transform: translateX(-100%); 
+         opacity: 1;
+            }
+}
+
+@media screen and (max-width: 600px) {
+    .divofreci{
+       display:none;       
+    }
+    .botonmenuofreci{
+        display:inline-block;
+    }
+}
+
+
+@media screen and (max-width: 767px) {
+    .divofreci{
+       display:none;       
+    }
+    .botonmenuofreci{
+        display:inline-block;
+    }
+}
