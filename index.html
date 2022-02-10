@@ -31,6 +31,9 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#codeajax" role="tab" aria-controls="pills-contact" aria-selected="false">AJAX</a>
         </li>
+        <li class="nav-item" role="presentation">
+    	    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#codehtmlfns" role="tab" aria-controls="pills-contact" aria-selected="false">HTML_FNS</a>
+        </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="preview" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -314,6 +317,263 @@ function incide_ofrecimiento($ofrecimiento,$incidente){
             </pre>
         </div>
         
+	    <div class="tab-pane fade" id="codehtmlfns" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <pre class="language-php">
+                <code>
+&lt;!--Ccodigo de como se cargan las funciones delos paneles los id y los nombres de las clases son importanes--&gt;
+
+&lt;?php
+
+
+function ofrecimientoslist($incidente){
+$ClsOfr = new ClsOfrecimiento();
+$result = $ClsOfr-&gt;get_ofrecimiento('',$incidente,'',1);
+$salida = '';
+
+if(is_array($result)){
+    $i=1;    
+    $salida.=' &lt;div class="col-sm-12 col-md-4 col-lg-4 listofreci divofreci" id="divofreci"&gt;';
+    foreach($result as $row){
+        //datos
+        $fecharegist = cambia_fechaHora($row["ofr_fecha_registro"]);
+        $paisofrec = utf8_decode($row["pai_descripcion"]);			
+        $descripcionofreci = utf8_decode($row["ofr_observaciones"]);
+
+        $status = trim($row["ofr_situacion"]);
+
+        switch ($status) {
+            case 1: $status_descripcion = "Ofrecimiento Env&iacute;ado"; $disabled = ""; break;
+            case 2: $status_descripcion = "Ofrecimiento Aprobado"; $disabled = "disabled"; break;
+            case 3: $status_descripcion = "Ofrecimiento Afianzado"; $disabled = "disabled"; break;
+            default: // code... break;
+        }
+
+        $codigo = $row["ofr_codigo"];
+        $incidentecodes = $row["ofr_incidente"];		
+        //html
+        
+        $salida.=' &lt;a href="javascript:void(0)" class="targetofreci"  onclick="incideofrecimien('.$codigo.','.$incidentecodes.','.$i.');"&gt;';
+        $salida.=' &lt;div class="row targetoactive bg-white"&gt;';
+        
+        $salida.=' &lt;div class="col-sm-12 col-md-1 col-lg-0 mt-2"&gt;';
+        $salida.=' &lt;input class="form-check-input ml-2" type="checkbox" name="checkboxactiv" id="check'.$i.'" value=""&gt;';
+        $salida.=' &lt;/div&gt;';
+        $salida.=' &lt;div class="col-sm-11 col-md-11 col-lg-12"&gt;';
+        $salida.=' &lt;p class="mt-2 ml-5 h5 text-primary text-left"&gt;'.$fecharegist.' &lt;/p&gt;';
+        $salida.=' &lt;/div&gt;';                  
+        $salida.=' &lt;div class="col-12"&gt;';
+        $salida.=' &lt;p class="ml-5 h5 font-weight-bold texact"&gt;'.$paisofrec.' &lt;/p&gt;';
+        $salida.=' &lt;/div&gt;';
+        $salida.=' &lt;div class="col-12"&gt;';
+        $salida.=' &lt;p class="ml-5 h6 text-dark texact"&gt;'.$status_descripcion.' &lt;/p&gt;';
+        $salida.=' &lt;/div&gt;';
+        $salida.=' &lt;div class="col-12 mb-2"&gt;';
+        $salida.=' &lt;p class="ml-5 h6 text-muted "&gt;'.$descripcionofreci.' &lt;/p&gt;';
+        $salida.=' &lt;/div&gt;';                                			                 
+        $salida.=' &lt;/div&gt;';
+        $salida.=' &lt;/a&gt;';
+        
+        //--						
+        $i++;			
+    }		
+    $salida.=' &lt;/div&gt;';
+}else{
+    $salida.=' &lt;div class="col-sm-12 col-md-4 col-lg-4 bg-white listofreci divofreci" id="divofreci"&gt;';
+    $salida.=' &lt;center&gt;';
+    $salida.=' &lt;br class="mt-5"&gt; &lt;br class="mt-5"&gt; &lt;br class="mt-2"&gt;';
+    $salida.=' &lt;h1 class="mt-5"&gt; &lt;i class="far fa-list-alt"&gt; &lt;/i&gt; &lt;/h1&gt;';                        
+    $salida.=' &lt;p class="h3 font-weight-bold"&gt;Sin Ofrecimientos &lt;/p&gt;';
+    $salida.=' &lt;button class="btn btn-white" onclick="window.history.back();"&gt;';
+    $salida.=' &lt;span class="btn-label"&gt; &lt;i class="fas fa-chevron-left"&gt; &lt;/i&gt; &lt;/span&gt;';
+    $salida.=' &lt;span class="text"&gt;&nbsp;&nbsp;&nbsp;Regresar &lt;/span&gt;';
+    $salida.=' &lt;/button&gt;';
+    $salida.=' &lt;/center&gt;';
+    $salida.=' &lt;/div&gt;';
+}
+
+return $salida;
+}
+
+
+function detallofreci($codigo,$incidente){
+$ClsOfr = new ClsOfrecimiento();
+$ClsInc = new ClsIncidente();
+$result = $ClsInc-&gt;get_incidente($incidente);
+$salida = '';
+
+if(is_array($result)){
+    foreach($result as $row){
+        $nombre = trim($row["inc_nombre"]);
+        $pais = trim($row["pai_descripcion"]);
+        $descripcion = trim($row["inc_descripcion"]);
+        //--
+        $url = trim($row["inc_documento"]);
+
+        
+        
+    }
+}
+
+if($codigo != ""){
+    $result = $ClsOfr-&gt;get_ofrecimiento($codigo,$incidente);
+    if(is_array($result)){
+        foreach($result as $row){
+            $pais_oferta = trim($row["pai_descripcion"]);
+            $observaciones = trim($row["ofr_observaciones"]);
+                $status = trim($row["ofr_situacion"]);
+            //--
+            $url_ofrecimiento = trim($row["ofr_documento_ofrecimiento"]);
+            $url_aprobacion = trim($row["ofr_documento_aprobacion"]);
+        }
+    }
+        switch ($status) {
+            case 1: $status_descripcion = "Ofrecimiento Env&iacute;ado"; $disabled = ""; break;
+            case 2: $status_descripcion = "Ofrecimiento Aprobado"; $disabled = "disabled"; break;
+            case 3: $status_descripcion = "Ofrecimiento Afianzado"; $disabled = "disabled"; break;
+            default: // code... break;
+        }
+        
+}		
+//html	
+
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-12"&gt;';	
+$salida.=' &lt;div class="card"&gt;';	
+$salida.=' &lt;div class="card-header card-header-primary card-header-icon"&gt;';	
+$salida.=' &lt;div class="card-icon"&gt;';	
+$salida.=' &lt;i class="fas fa-info-circle fa-2x " aria-hidden="true"&gt; &lt;/i&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;h4 class="card-title"&gt;Informaci&oacute;n del Llamamiento &lt;/h4&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="card-body"&gt;';		
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-12"&gt;';	
+$salida.=' &lt;label&gt;Pa&iacute;s Asistido: &lt;/label&gt;';	
+$salida.=' &lt;input type="text" class="form-control" value="'.$pais.'" readonly /&gt;';	
+$salida.=' &lt;input type="hidden" name="incidente" id="incidentecodes" value="'.$incidente.'" /&gt;';	
+$salida.=' &lt;input type="hidden" name="ofrecimiento" id="ofrecimiento" value="'.$codigo.'" /&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-12"&gt;';	
+$salida.=' &lt;label&gt;Nombre del Incidente: &lt;/label&gt;';	
+$salida.=' &lt;input type="text" class="form-control" value="'.$nombre.'" readonly /&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-12"&gt;';	
+$salida.=' &lt;label&gt;Descripci&oacute;n: &lt;/label&gt;';	
+$salida.=' &lt;textarea class="form-control" rows="5" readonly&gt;'.$descripcion.' &lt;/textarea&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-6 text-center"&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;a href="javascript:void(0)" onclick="verNecesidades('.$incidente.')"&gt;';	
+$salida.=' &lt;i class="fa fa-tasks fa-5x text-primary" aria-hidden="true"&gt; &lt;/i&gt;';	
+$salida.=' &lt;/a&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;label&gt;Ver Necesidades &lt;/label&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="col-md-6 text-center"&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;a href="'.$url.'" target="_blank"&gt;';	
+$salida.=' &lt;i class="fa fa-file-pdf fa-5x text-primary" aria-hidden="true"&gt; &lt;/i&gt;';	
+$salida.=' &lt;/a&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;label&gt;Documento de Declaratoria &lt;/label&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="col-md-12"&gt;';	
+$salida.=' &lt;div class="card"&gt;';	
+$salida.=' &lt;div class="card-header card-header-primary card-header-icon"&gt;';	
+$salida.=' &lt;div class="card-icon"&gt;';	
+$salida.=' &lt;i class="fas fa-info-circle fa-2x " aria-hidden="true"&gt; &lt;/i&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;h4 class="card-title"&gt;Oferta de Asistencia Humanitaria &lt;/h4&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="card-body"&gt;';		
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-12"&gt;';	
+$salida.=' &lt;label&gt;Pa&iacute;s Oferente: &lt;/label&gt;  &lt;span class="text-danger"&gt;* &lt;/span&gt;';	
+$salida.=' &lt;input type="text" class="form-control" value="'.$pais_oferta.'" readonly /&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-12"&gt;';	
+$salida.=' &lt;label&gt;Status del Ofrecimiento: &lt;/label&gt;';	
+$salida.=' &lt;input type="text" class="form-control" value="'.$status_descripcion.'" readonly /&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-12"&gt;';	
+$salida.=' &lt;label&gt;Observaciones: &lt;/label&gt;';	
+$salida.=' &lt;textarea class="form-control" rows="5" readonly&gt;'.$observaciones.' &lt;/textarea&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-3 text-center"&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;a href="'.$url_ofrecimiento.'" target="_blank"&gt;';	
+$salida.=' &lt;i class="fa fa-file-pdf fa-5x text-info" aria-hidden="true"&gt; &lt;/i&gt;';	
+$salida.=' &lt;/a&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;label&gt;Documento de Ofrecimiento &lt;/label&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="col-md-3 text-center"&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;a href="'.$url_aprobacion.'" target="_blank"&gt;';	
+$salida.=' &lt;i class="fa fa-file-pdf fa-5x text-success" aria-hidden="true"&gt; &lt;/i&gt;';	
+$salida.=' &lt;/a&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=' &lt;label&gt;Documento de Aprobaci&oacute;n &lt;/label&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="col-md-6 text-center"&gt;';	
+$salida.=' &lt;br&gt; &lt;br&gt;';	
+$salida.=' &lt;form name="f1" name="f1" method="post" enctype="multipart/form-data"&gt;';	
+$salida.=' &lt;button type="button" class="btn btn-primary btn-block" id="btn-cargar" onclick="DocumentoJs();"&gt; &lt;i class="fas fa-file-pdf"&gt; &lt;/i&gt; Seleccionar Archivo...  &lt;/button&gt;';	
+$salida.=' &lt;input id="documento" name="documento" type="file" multiple="false" class="hidden" onchange="comfirmAprobacionDocumento();"&gt;';	
+$salida.=' &lt;/form&gt;';	
+$salida.=' &lt;label&gt;Carga de Documento de Aprobaci&oacute;n &lt;/label&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="card"&gt;';	
+$salida.=' &lt;div class="card-header card-header-primary card-header-icon"&gt;';	
+$salida.=' &lt;div class="card-icon"&gt;';	
+$salida.=' &lt;i class="fas fa-tasks fa-2x " aria-hidden="true"&gt; &lt;/i&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;h4 class="card-title"&gt;Detalle del Ofrecimiento &lt;/h4&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;div class="card-body"&gt;';	
+$salida.=' &lt;div class="row"&gt;';	
+$salida.=' &lt;div class="col-md-6"&gt; &lt;/div&gt;';	
+$salida.=' &lt;div class="col-md-6 text-right"&gt;';	
+$salida.=' &lt;button type="button" class="btn btn-primary" id="btn-notificar" onclick="aprobarOfrecimiento();" '.$disabled.'&gt; &lt;i class="fas fa-check-double"&gt; &lt;/i&gt; Aprobar ofrecimientos seleccionados &lt;/button&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;br&gt;';	
+$salida.=''.tabla_ofrecimiento_detalle_aprobar($codigo, $incidente).'';	
+$salida.=' &lt;/div&gt;';	
+$salida.=' &lt;/div&gt;';	
+
+return $salida;
+}
+
+
+?&gt;
+                </code>
+            </pre>
+        </div>
+	    
+	    
     </div>
     
 
